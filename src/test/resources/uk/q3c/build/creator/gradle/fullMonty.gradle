@@ -1,0 +1,61 @@
+buildscript {
+    ext.kotlin_version = '1.0.4'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version'
+    }
+}
+
+plugins {
+    id 'maven'
+    id 'maven-publish'
+    id 'org.unbroken-dome.test-sets' version '1.2.0'
+}
+
+testSets {
+    unitTest
+    integrationTest
+    functionalTest
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version'
+    compile 'org.jetbrains.kotlin:kotlin-reflect:$kotlin_version'
+    unitTestCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    unitTestCompile 'cglib:cglib-nodep:3.2.0'
+    unitTestCompile 'org.objenesis:objenesis:2.2'
+    integrationTestCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    integrationTestCompile 'cglib:cglib-nodep:3.2.0'
+    integrationTestCompile 'org.objenesis:objenesis:2.2'
+    functionalTestCompile 'junit:junit:4:12'
+}
+apply plugin: 'uk.q3c.simplycd'
+apply from: 'gradle/versioning.gradle'
+
+publishing {
+
+    publications {
+
+        mavenStuff(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar {
+                classifier 'sources'
+            }
+
+            artifact javadocJar {
+                classifier 'javadoc'
+            }
+        }
+    }
+}

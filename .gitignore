@@ -1,21 +1,7 @@
+build
 .gradle
 .idea
-.settings
-bin
-build
-logs
-
-projectcreator.iml
-.classpath
-.project
-
-settings.gradle~
-.gitattributes~
-build.gradle~
-.gitignore~
-README.md~
-
-
+*.iws
 
 
 
