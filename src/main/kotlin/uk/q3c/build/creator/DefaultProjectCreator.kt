@@ -5,37 +5,36 @@ import com.google.inject.Inject
 /**
  * Created by David Sowerby on 10 Oct 2016
  */
-class DefaultProjectCreator @Inject constructor(val featureBuilders: FeatureBuilders) : ProjectCreator {
+class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder>, val configuration: ProjectConfiguration) : ProjectCreator, ProjectConfiguration by configuration {
 
-    private var builders: Set<FeatureBuilder<*>>
+//    private var builders: Set<Builder>
+
 
     init {
-        this.builders = featureBuilders.builders
-    }
-
-
-    override fun testSet(setName: String, testFramework: TestFramework, version: String): ProjectCreator {
+//        this.builders = featureBuilders
         for (builder in builders) {
-            builder.testSet(setName, testFramework, version)
+            builder.setProjectCreator(this)
         }
-        return this
     }
 
-    override fun mavenPublishing(): ProjectCreator {
-        for (builder in builders) {
-            builder.mavenPublishing()
+
+    fun execute() {
+        for (step in configuration.getSteps()) {
+            for (builder in builders) {
+                when(step){
+                    is SourceLanguage -> builder.set(step)
+                    is TestSet -> builder.set(step)
+                    else -> {
+                        throw UnknownStepException (step.javaClass.name+" is unknown")
+                    }
+                }
+            }
         }
-        return this
     }
 
-    override fun write() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun source(language: Language, version: String): ProjectCreator {
-        for (builder in builders) {
-            builder.source(language, version)
-        }
-        return this
-    }
+}
+
+class UnknownStepException(msg: String) : Throwable(msg) {
+
 }

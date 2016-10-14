@@ -11,10 +11,10 @@ import java.util.Set;
  */
 public class FeatureBuilders {
 
-    private Set<FeatureBuilder> builders;
+    private Set<Builder> builders;
 
     @Inject
-    public FeatureBuilders(Set<FeatureBuilder> builders) {
+    public FeatureBuilders(Set<Builder> builders) {
         this.builders = builders;
     }
 
@@ -23,7 +23,7 @@ public class FeatureBuilders {
     }
 
     @Nonnull
-    public ImmutableSet<FeatureBuilder> getBuilders() {
+    public ImmutableSet<Builder> getBuilders() {
         return ImmutableSet.copyOf(builders);
     }
 }

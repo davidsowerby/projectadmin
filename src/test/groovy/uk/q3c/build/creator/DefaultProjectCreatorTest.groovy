@@ -21,11 +21,15 @@ class DefaultProjectCreatorTest extends Specification {
 
         then:
         creator instanceof DefaultProjectCreator
-        bc.builderCount() == 1
+        bc.builderCount() == 2
     }
 
-    def "java source adds directories, gradle plugin and sourceCompatibility"() {
+    def "setProjectCreator() is called on all builders"() {
         expect: false
     }
 
+    def "execute calls each builder with each step"() {
+
+        expect: false
+    }
 }
