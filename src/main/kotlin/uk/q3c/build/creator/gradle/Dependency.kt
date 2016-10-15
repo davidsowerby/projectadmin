@@ -2,8 +2,6 @@ package uk.q3c.build.creator.gradle
 
 import uk.q3c.build.creator.gradle.element.BasicScriptElement
 import uk.q3c.build.creator.gradle.element.ScriptElement
-import java.lang.RuntimeException
-import java.lang.UnsupportedOperationException
 
 
 class Dependency(val scope: String, dependency: String) : BasicScriptElement(dependency) {
@@ -39,6 +37,5 @@ class Dependency(val scope: String, dependency: String) : BasicScriptElement(dep
         fileBuffer.decrementIndent()
         fileBuffer.appendLine("}")
     }
-
 
 }

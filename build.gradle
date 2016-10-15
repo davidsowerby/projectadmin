@@ -1,10 +1,10 @@
 //noinspection GrPackage
 buildscript {
-    ext.kotlin_version = '1.1-SNAPSHOT'
+    ext.kotlin_version = '1.0.4'
     repositories {
-        maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots'
-        }
+//        maven {
+//            url 'https://oss.sonatype.org/content/repositories/snapshots'
+//        }
         mavenCentral()
         jcenter()
     }
@@ -27,7 +27,7 @@ apply plugin: 'kotlin'
 apply plugin: "jacoco"
 
 sourceCompatibility = '1.8'
-version = '0.0.1.1'
+version = '0.0.1.2'
 group = 'uk.q3c.build'
 
 testSets {
@@ -40,9 +40,9 @@ ext.guavaVersion = '19.0'
 ext.guiceVersion = '4.0'
 
 repositories {
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
-    }
+//    maven {
+//        url 'https://oss.sonatype.org/content/repositories/snapshots'
+//    }
     jcenter()
     mavenLocal()
 }

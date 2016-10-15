@@ -7,11 +7,7 @@ import com.google.inject.Inject
  */
 class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder>, val configuration: ProjectConfiguration) : ProjectCreator, ProjectConfiguration by configuration {
 
-//    private var builders: Set<Builder>
-
-
     init {
-//        this.builders = featureBuilders
         for (builder in builders) {
             builder.setProjectCreator(this)
         }
@@ -30,6 +26,15 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
                 }
             }
         }
+        if (useMavenPublishing) {
+            for (builder in builders) {
+                builder.mavenPublishing()
+            }
+        }
+    }
+
+    override fun buildersCount(): Int {
+        return builders.size
     }
 
 

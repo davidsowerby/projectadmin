@@ -17,7 +17,6 @@ public class ProjectCreatorModule extends AbstractModule {
         builders = Multibinder.newSetBinder(binder(), Builder.class);
         builders.addBinding().toInstance(new GradleGroovyBuilder());
         builders.addBinding().toInstance(new DirectoryBuilder());
-        bind(FeatureBuilders.class);
         bind(ProjectCreator.class).to(DefaultProjectCreator.class);
         bind(ProjectConfiguration.class).to(DefaultProjectConfiguration.class);
 
