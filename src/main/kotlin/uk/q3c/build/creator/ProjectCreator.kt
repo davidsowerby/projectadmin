@@ -59,8 +59,8 @@ interface ProjectConfiguration {
      */
     fun issueLabels(labels: Map<String, String>): ProjectConfiguration
 
-    open fun projectName(projectName: String): ProjectConfiguration
-    open fun remoteRepoUser(username: String): ProjectConfiguration
+    fun projectName(projectName: String): ProjectConfiguration
+    fun remoteRepoUser(username: String): ProjectConfiguration
 }
 
 enum class Language {

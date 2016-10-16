@@ -22,6 +22,10 @@ class DefaultProjectCreatorTest extends Specification {
     GitPlus gitPlus = Mock(GitPlus)
     GitRemote gitRemote = Mock(GitRemote)
 
+    def setup() {
+        configuration.getGitPlus() >> gitPlus
+    }
+
 
     def "module configuration"() {
         given:
