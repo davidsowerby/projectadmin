@@ -1,11 +1,14 @@
 package uk.q3c.build.creator
 
 import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableMap
 import com.google.common.collect.ImmutableSet
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
+import uk.q3c.build.gitplus.gitplus.GitPlus
+import uk.q3c.build.gitplus.remote.GitRemote
 
 /**
  * Created by David Sowerby on 10 Oct 2016
@@ -16,6 +19,8 @@ class DefaultProjectCreatorTest extends Specification {
     MockBuilder builder2 = new MockBuilder()
     ProjectConfiguration configuration = Mock(ProjectConfiguration)
     ProjectCreator creator
+    GitPlus gitPlus = Mock(GitPlus)
+    GitRemote gitRemote = Mock(GitRemote)
 
 
     def "module configuration"() {
@@ -75,7 +80,7 @@ class DefaultProjectCreatorTest extends Specification {
         builder2.sourceLanguages.get(0) == sourceLanguage1
     }
 
-    def "delegation"() {
+    def "delegation to project configuration"() {
 
         given:
         Set<Builder> builders = ImmutableSet.of(builder1, builder2)
@@ -90,6 +95,60 @@ class DefaultProjectCreatorTest extends Specification {
         1 * configuration.setProjectDir(projectDir)
         1 * configuration.setBasePackage("x")
     }
+
+    def "issue labels configuration passed to GitPlus"() {
+        given:
+        Injector injector = Guice.createInjector(new ProjectCreatorModule())
+        creator = injector.getInstance(ProjectCreator)
+        Map<String, String> labels = ImmutableMap.of("a", "b")
+
+        when:
+        creator.mergeIssueLabels(true)
+        creator.projectName("wiggly")
+        creator.remoteRepoUser('davidsowerby')
+        creator.issueLabels(labels)
+
+        then:
+        creator.gitPlus.configuration.mergeIssueLabels
+        creator.gitPlus.configuration.remoteRepoName == 'wiggly'
+        creator.gitPlus.configuration.projectName == 'wiggly'
+        creator.gitPlus.configuration.remoteRepoUser == 'davidsowerby'
+        creator.gitPlus.configuration.issueLabels == labels
+    }
+
+    def "update labels is called in GitRemote even when it is the only setting"() {
+        given:
+        gitPlus.getGitRemote() >> gitRemote
+        configuration.getMergeIssueLabels() >> true
+        configuration.getGitPlus() >> gitPlus
+        configuration.getSteps() >> ImmutableList.of()
+        Set<Builder> builders = ImmutableSet.of(builder1, builder2)
+        creator = new DefaultProjectCreator(builders, configuration)
+
+        when:
+        creator.execute()
+
+        then:
+        1 * gitRemote.mergeLabels()
+
+
+    }
+
+//    def "update labels - for real"(){
+//        given:
+//        Injector injector = Guice.createInjector(new ProjectCreatorModule())
+//        creator = injector.getInstance(ProjectCreator)
+//
+//        when:
+//        creator.mergeIssueLabels(true)
+//        creator.projectName("gitplus")
+//        creator.remoteRepoUser('davidsowerby')
+//        creator.gitPlus.gitRemote.mergeLabels()
+//
+//        then:
+//        true
+//
+//    }
 
 
     class MockBuilder implements Builder {

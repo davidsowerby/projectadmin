@@ -14,14 +14,14 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
     }
 
 
-    fun execute() {
+    override fun execute() {
         for (step in configuration.getSteps()) {
             for (builder in builders) {
-                when(step){
+                when (step) {
                     is SourceLanguage -> builder.set(step)
                     is TestSet -> builder.set(step)
                     else -> {
-                        throw UnknownStepException (step.javaClass.name+" is unknown")
+                        throw UnknownStepException(step.javaClass.name + " is unknown")
                     }
                 }
             }
@@ -30,6 +30,15 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
             for (builder in builders) {
                 builder.mavenPublishing()
             }
+        }
+
+        // This will create repos if config correctly set up
+        configuration.gitPlus.createOrVerifyRepos()
+
+        // this could duplicate the merge if already done by previous step.  This shold be fixable when gitPlus API fixed
+        // see https://github.com/davidsowerby/gitplus/issues/77
+        if (configuration.mergeIssueLabels) {
+            configuration.gitPlus.gitRemote.mergeLabels()
         }
     }
 
