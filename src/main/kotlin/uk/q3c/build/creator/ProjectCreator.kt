@@ -11,7 +11,7 @@ import java.io.File
  * The [execute] method is then called to generate the required output, by providing the configuration to the [Builder]
  * implementations.  These builder implementations are defined by the Guice [ProjectCreatorModule]
  *
- * Note that for any action which requires authorised access to the remote repo, GitPlus requires that API keys are
+ * Note that for any action which requires authorised access to the remote repo, appropriate [API keys are required](http://gitplus.readthedocs.io/en/master/build-properties/).
  *
  * Created by David Sowerby on 10 Oct 2016
  */
