@@ -33,12 +33,12 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
         }
 
         // This will create repos if config correctly set up
-        configuration.gitPlus.createOrVerifyRepos()
+        configuration.gitPlus.execute()
 
-        // this could duplicate the merge if already done by previous step.  This shold be fixable when gitPlus API fixed
+        // this could duplicate the merge if already done by previous step.  This should be fixable when gitPlus API fixed
         // see https://github.com/davidsowerby/gitplus/issues/77
         if (configuration.mergeIssueLabels) {
-            configuration.gitPlus.gitRemote.mergeLabels()
+            configuration.gitPlus.remote.mergeLabels()
         }
     }
 
@@ -49,6 +49,4 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
 
 }
 
-class UnknownStepException(msg: String) : Throwable(msg) {
-
-}
+class UnknownStepException(msg: String) : Throwable(msg)

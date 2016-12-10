@@ -12,6 +12,11 @@ class Buildscript : NamedBlock() {
     val dependencies = Dependencies()
     val repositories = Repositories()
 
+    init {
+        elements.add(repositories)
+        elements.add(dependencies)
+    }
+
     override fun blockName(): String {
         return "buildscript"
     }
@@ -22,22 +27,33 @@ class Buildscript : NamedBlock() {
     }
 
     fun dependencies(scope: String, init: Dependencies.() -> Unit): Dependencies {
-        dependencies.setCurrentScope(scope)
+        dependencies.scope(scope)
         dependencies.init()
         return dependencies()
     }
 
     fun dependencies(): Dependencies {
-        if (!elements.contains(dependencies)) {
-            elements.add(dependencies)
-        }
         return dependencies
     }
 
-    fun repositories(): Repositories {
-        if (!elements.contains(repositories)) {
-            elements.add(repositories)
+    fun repositories(vararg repos: String): Repositories {
+        for (repo in repos) {
+            repositories.repositories(*repos)
         }
         return repositories
+    }
+
+    /**
+     * If there are only two sub-elements, they will be Dependencies and Repositories.  If they are both empty, we do not want to print
+     * anything
+     */
+    override fun isNotEmpty(): Boolean {
+        if (elements.size > 2) {
+            return true
+        }
+        if (dependencies.isNotEmpty() || repositories.isNotEmpty()) {
+            return true
+        }
+        return false
     }
 }

@@ -29,13 +29,20 @@ class Dependency(val scope: String, dependency: String) : BasicScriptElement(dep
 
     override fun write() {
         val quotedContent: String = if (content.contains("()")) content else "'$content'"
-        fileBuffer.appendLine(scope, "(", quotedContent, ") {")
-        fileBuffer.incrementIndent()
-        for (element in elements) {
-            element.write()
+        if (elements.isNotEmpty()) {
+            fileBuffer.appendLine(scope, "(", quotedContent, ") {")
+            fileBuffer.incrementIndent()
+            for (element in elements) {
+                element.write()
+            }
+            fileBuffer.decrementIndent()
+            fileBuffer.appendLine("}")
+        } else {
+            fileBuffer.appendLine(scope, " ", quotedContent)
         }
-        fileBuffer.decrementIndent()
-        fileBuffer.appendLine("}")
+
     }
 
 }
+
+

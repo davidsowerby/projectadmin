@@ -52,7 +52,6 @@ object DefaultFileBuffer : FileBuffer {
 
     override fun appendLine(vararg items: String) {
         log.debug("appending {} items, plus line terminator", items.size)
-        indent()
         append(*items)
         buf.append(newLine)
     }

@@ -25,15 +25,15 @@ abstract class NamedBlock : ScriptElement {
      * Write the content of this block together with the block opening and closing.  Note that nothing at all is written if the block is empty
      */
     open fun writeBlockToBuffer() {
-        fileBuffer.blankLine()
         if (writeWhenEmpty || this.isNotEmpty()) {
+            fileBuffer.blankLine()
             openBlock()
             writeContent()
             closeBlock()
         }
     }
 
-    fun isNotEmpty(): Boolean {
+    open fun isNotEmpty(): Boolean {
         return elements.isNotEmpty()
     }
 
@@ -54,4 +54,11 @@ abstract class NamedBlock : ScriptElement {
     open operator fun String.unaryPlus() {
         elements.add(BasicScriptElement(this))
     }
+
+    fun contains(element: ScriptElement): Boolean {
+        return elements.contains(element)
+    }
 }
+
+
+

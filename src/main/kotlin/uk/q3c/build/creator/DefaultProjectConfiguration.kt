@@ -40,12 +40,12 @@ class DefaultProjectConfiguration @Inject constructor(override val gitPlus: GitP
     }
 
     override fun mergeIssueLabels(merge: Boolean): ProjectConfiguration {
-        gitPlus.configuration.mergeIssueLabels(merge)
+        gitPlus.remote.mergeIssueLabels(merge)
         return this
     }
 
     override fun issueLabels(labels: Map<String, String>): ProjectConfiguration {
-        gitPlus.configuration.issueLabels(labels)
+        gitPlus.remote.issueLabels(labels)
         return this
     }
 
@@ -60,28 +60,22 @@ class DefaultProjectConfiguration @Inject constructor(override val gitPlus: GitP
 
     override fun projectName(projectName: String): ProjectConfiguration {
         this.projectName = projectName
-        gitPlus.configuration.remoteRepoName(projectName)
-        gitPlus.configuration.projectName(projectName)
+        gitPlus.remote.repoName(projectName)
+        gitPlus.local.projectName(projectName)
         return this
     }
 
     override fun remoteRepoUser(username: String): ProjectConfiguration {
         this.projectUserName = username
-        gitPlus.configuration.remoteRepoUser(username)
+        gitPlus.remote.repoUser(username)
         return this
     }
 
 }
 
-interface ConfigStep {
+interface ConfigStep
 
-}
+data class SourceLanguage(val language: Language, val version: String) : ConfigStep
 
-data class SourceLanguage(val language: Language, val version: String) : ConfigStep {
-
-}
-
-data class TestSet(val setName: String, val testFramework: TestFramework, val version: String) : ConfigStep {
-
-}
+data class TestSet(val setName: String, val testFramework: TestFramework, val version: String) : ConfigStep
 

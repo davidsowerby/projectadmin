@@ -53,11 +53,12 @@ class GradleGroovyBuilder : Builder {
     }
 
 
-    fun javaSource(sourceLevel: String) {
+    fun javaSource(sourceLevel: String): GradleGroovyBuilder {
         plugins {
             +"java"
         }
         elements.add(BasicScriptElement("sourceCompatibility = '$sourceLevel'"))
+        return this
     }
 
     fun buildscript(init: Buildscript.() -> Unit): Buildscript {
@@ -66,16 +67,18 @@ class GradleGroovyBuilder : Builder {
     }
 
     fun dependencies(scope: String, init: Dependencies.() -> Unit): Dependencies {
-        dependencies.setCurrentScope(scope)
+        dependencies.scope(scope)
         dependencies.init()
         return dependencies
     }
 
 
-    fun task(name: String, type: String, dependsOn: String, plugin: String): GradleGroovyBuilder {
-        elements.add(Task(name = name, type = type, dependsOn = dependsOn, plugin = plugin))
-        return this
+    fun task(name: String, type: String = "", dependsOn: String = "", plugin: String = ""): Task {
+        val task: Task = Task(name = name, type = type, dependsOn = dependsOn, plugin = plugin)
+        elements.add(task)
+        return task
     }
+
 
     fun wrapper(gradleVersion: String): GradleGroovyBuilder {
         task(name = "wrapper", type = "Wrapper", plugin = "", dependsOn = "") {
@@ -161,7 +164,8 @@ class GradleGroovyBuilder : Builder {
         return buildscript
     }
 
-    fun repositories(): Repositories {
+    fun repositories(vararg repos: String): Repositories {
+        repositories.repositories(*repos)
         return repositories
     }
 
@@ -174,6 +178,10 @@ class GradleGroovyBuilder : Builder {
         return this
     }
 
+    fun line(line: String): GradleGroovyBuilder {
+        elements.add(BasicScriptElement(line))
+        return this
+    }
 
     override fun setProjectCreator(creator: ProjectCreator) {
         this.projectCreator = creator

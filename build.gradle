@@ -1,6 +1,6 @@
 //noinspection GrPackage
 buildscript {
-    ext.kotlin_version = '1.0.4'
+    ext.kotlin_version = '1.0.5-2'
     repositories {
 //        maven {
 //            url 'https://oss.sonatype.org/content/repositories/snapshots'
@@ -53,7 +53,7 @@ dependencies {
     compile 'com.google.inject.extensions:guice-multibindings:' + guiceVersion
 
     //gitplus
-    compile 'uk.q3c.build:gitplus:0.14.1.42'
+    compile 'uk.q3c.build:gitplus:0.17.0.61'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -73,7 +73,6 @@ dependencies {
     compile 'com.google.guava:guava:' + guavaVersion
     compile 'org.apache.commons:commons-lang3:' + commonsLangVersion
     compile 'com.google.code.findbugs:annotations:3.0.0'
-
 
 }
 
@@ -122,4 +121,5 @@ jacocoTestReport {
         xml.enabled true
     }
 }
+
 

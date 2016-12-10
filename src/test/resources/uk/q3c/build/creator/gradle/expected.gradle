@@ -10,6 +10,11 @@ buildscript {
     }
 }
 
+plugins {
+    id 'java'
+    id 'groovy'
+}
+
 repositories {
     mavenLocal()
 }
@@ -24,12 +29,6 @@ dependencies {
     compile 'depA'
     compile 'depB'
 }
-
-plugins {
-    id 'java'
-    id 'groovy'
-    id 'wiggly'
-}
 group 'uk.q3c.simplycd'
 
 testSets {
@@ -37,15 +36,15 @@ testSets {
     line 2
 }
 
-tasks.create(name: wrapper, type: Wrapper) {
+task(name: 'wrapper', type: Wrapper) {
     gradleVersion = '2.10'
 }
 apply plugin: 'wiggly'
 apply from: 'wiggly.gradle'
 
-tasks.create(name: hello) {
+task(name: 'hello') {
 }
 
-tasks.create(name: hello2, type: Test, dependsOn: otherTask) {
+task(name: 'hello2', type: Test, dependsOn: otherTask) {
 }
-sourceCompatibility = 1.8
+sourceCompatibility = '1.8'

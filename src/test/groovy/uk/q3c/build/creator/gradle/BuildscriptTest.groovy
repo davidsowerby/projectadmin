@@ -1,6 +1,8 @@
 package uk.q3c.build.creator.gradle
 
 import spock.lang.Specification
+import uk.q3c.build.creator.KotlinObjectFactory
+import uk.q3c.build.creator.gradle.buffer.FileBuffer
 
 /**
  * Created by David Sowerby on 07 Oct 2016
@@ -8,40 +10,27 @@ import spock.lang.Specification
 class BuildscriptTest extends Specification {
 
     Buildscript buildscript
+    FileBuffer fileBuffer
 
     def setup() {
+        fileBuffer = KotlinObjectFactory.fileBuffer()
         buildscript = new Buildscript()
     }
 
-    def "repositories added once to elements and only once"() {
-        when:
+    def "repositories has primary sub-elements added at startup"() {
 
-        true // do nothing
+        expect:
+        buildscript.elements.size() == 2
+        buildscript.elements.contains(buildscript.repositories)
+        buildscript.elements.contains(buildscript.dependencies)
+
+    }
+
+    def "prints nothing when empty"() {
+        when:
+        buildscript.write()
 
         then:
-        buildscript.elements.isEmpty()
-
-        when:
-        Repositories repos = buildscript.repositories()
-
-        then:
-        buildscript.elements.size() == 1
-        buildscript.elements.contains(repos)
-
-        when:
-        repos = buildscript.repositories()
-
-        then:
-        buildscript.elements.size() == 1
-        buildscript.elements.contains(repos)
-
-        when:
-        repos = buildscript.getRepositories()
-
-        then:
-        buildscript.elements.size() == 1
-        buildscript.elements.contains(repos)
-
-
+        fileBuffer.output().isEmpty()
     }
 }

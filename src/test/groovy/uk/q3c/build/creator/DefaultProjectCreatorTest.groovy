@@ -113,16 +113,16 @@ class DefaultProjectCreatorTest extends Specification {
         creator.issueLabels(labels)
 
         then:
-        creator.gitPlus.configuration.mergeIssueLabels
-        creator.gitPlus.configuration.remoteRepoName == 'wiggly'
-        creator.gitPlus.configuration.projectName == 'wiggly'
-        creator.gitPlus.configuration.remoteRepoUser == 'davidsowerby'
-        creator.gitPlus.configuration.issueLabels == labels
+        creator.gitPlus.remote.mergeIssueLabels
+        creator.gitPlus.remote.repoName == 'wiggly'
+        creator.gitPlus.local.projectName == 'wiggly'
+        creator.gitPlus.remote.repoUser == 'davidsowerby'
+        creator.gitPlus.remote.issueLabels == labels
     }
 
     def "update labels is called in GitRemote even when it is the only setting"() {
         given:
-        gitPlus.getGitRemote() >> gitRemote
+        gitPlus.getRemote() >> gitRemote
         configuration.getMergeIssueLabels() >> true
         configuration.getGitPlus() >> gitPlus
         configuration.getSteps() >> ImmutableList.of()
