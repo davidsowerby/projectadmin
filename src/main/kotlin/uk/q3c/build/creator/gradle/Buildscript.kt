@@ -47,11 +47,8 @@ class Buildscript : NamedBlock() {
      * If there are only two sub-elements, they will be Dependencies and Repositories.  If they are both empty, we do not want to print
      * anything
      */
-    override fun isNotEmpty(): Boolean {
-        if (elements.size > 2) {
-            return true
-        }
-        if (dependencies.isNotEmpty() || repositories.isNotEmpty()) {
+    override fun isEmpty(): Boolean {
+        if (dependencies.isEmpty() && repositories.isEmpty() && elements.size == 2) {
             return true
         }
         return false

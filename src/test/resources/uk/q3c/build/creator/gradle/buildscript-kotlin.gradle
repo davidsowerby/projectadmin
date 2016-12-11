@@ -1,0 +1,12 @@
+buildscript {
+
+    repositories {
+        a
+        b
+    }
+
+    dependencies {
+        compile 'compile1'
+        compile 'compile2'
+    }
+}

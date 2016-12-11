@@ -1,19 +1,16 @@
 package uk.q3c.build.creator.gradle
 
-import spock.lang.Specification
-import uk.q3c.build.creator.KotlinObjectFactory
-import uk.q3c.build.creator.gradle.buffer.FileBuffer
-
+import uk.q3c.util.testutil.FileTestUtil
+import uk.q3c.util.testutil.TestResource
 /**
  * Created by David Sowerby on 07 Oct 2016
  */
-class BuildscriptTest extends Specification {
+class BuildscriptTest extends AbstractBuilderTest {
+
 
     Buildscript buildscript
-    FileBuffer fileBuffer
 
     def setup() {
-        fileBuffer = KotlinObjectFactory.fileBuffer()
         buildscript = new Buildscript()
     }
 
@@ -26,11 +23,36 @@ class BuildscriptTest extends Specification {
 
     }
 
-    def "prints nothing when empty"() {
+    def "prints nothing when empty, only relevant sub-section if not empty"() {
         when:
         buildscript.write()
 
         then:
         fileBuffer.output().isEmpty()
+
+        when:
+        buildscript.repositories().mavenLocal()
+        buildscript.write()
+
+        then:
+        !fileBuffer.output().isEmpty()
+    }
+
+    def "dependencies and repositories, kotlin API"() {
+        given:
+        BuildscriptTester tester = new BuildscriptTester()
+        File expectedOutput = TestResource.resource(this, 'buildscript-kotlin.gradle')
+
+        when:
+        tester.dependenciesOnly(builder)
+        tester.repositoriesOnly(builder)
+        builder.execute()
+
+
+        then:
+        Optional<String> diffs = FileTestUtil.compare(builder.outputFile(), expectedOutput)
+        if (diffs.isPresent()) println diffs.get()
+        !diffs.isPresent()
+
     }
 }

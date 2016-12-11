@@ -25,7 +25,7 @@ abstract class NamedBlock : ScriptElement {
      * Write the content of this block together with the block opening and closing.  Note that nothing at all is written if the block is empty
      */
     open fun writeBlockToBuffer() {
-        if (writeWhenEmpty || this.isNotEmpty()) {
+        if (writeWhenEmpty || (!this.isEmpty())) {
             fileBuffer.blankLine()
             openBlock()
             writeContent()
@@ -33,8 +33,8 @@ abstract class NamedBlock : ScriptElement {
         }
     }
 
-    open fun isNotEmpty(): Boolean {
-        return elements.isNotEmpty()
+    open fun isEmpty(): Boolean {
+        return elements.isEmpty()
     }
 
     open fun writeContent() {
