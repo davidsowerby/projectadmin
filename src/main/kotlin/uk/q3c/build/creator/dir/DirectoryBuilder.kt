@@ -5,6 +5,8 @@ import uk.q3c.build.creator.*
 import java.io.File
 
 /**
+ * Creates directories and files as required by configuration calls to [configParam] methods
+ *
  * Created by David Sowerby on 11 Oct 2016
  */
 class DirectoryBuilder : Builder {
@@ -16,7 +18,7 @@ class DirectoryBuilder : Builder {
     val dummyJavaCount: Int = 0
 
 
-    override fun write() {
+    override fun execute() {
         for (dir in directories) {
             if (!dir.exists()) {
                 FileUtils.forceMkdir(dir)
@@ -39,8 +41,8 @@ class DirectoryBuilder : Builder {
     }
 
 
-    override fun set(step: SourceLanguage) {
-        when (step.language) {
+    override fun configParam(sourceLanguage: SourceLanguage) {
+        when (sourceLanguage.language) {
             Language.JAVA -> addDirectories("src/main/java", mainResourcesDir())
             Language.KOTLIN -> addDirectories("src/main/kotlin", mainResourcesDir())
             Language.GROOVY -> addDirectories("src/main/groovy", mainResourcesDir())
@@ -65,13 +67,13 @@ class DirectoryBuilder : Builder {
         return File(projectCreator.projectDir, "src/test/resources")
     }
 
-    override fun set(step: TestSet) {
-        val languageDir: String = when (step.testFramework) {
+    override fun configParam(testSet: TestSet) {
+        val languageDir: String = when (testSet.testFramework) {
 
             TestFramework.JUNIT -> "java"
             TestFramework.SPOCK -> "groovy"
         }
-        val testDirPath = "src/${step.setName}/$languageDir"
+        val testDirPath = "src/${testSet.setName}/$languageDir"
         addDirectories(testDirPath, testResourcesDir())
     }
 

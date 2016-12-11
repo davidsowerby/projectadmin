@@ -32,7 +32,7 @@ class GradleGroovyBuilder : Builder {
     val testSets = TestSets()
 
 
-    override fun write() {
+    override fun execute() {
         buildscript.writeBlockToBuffer()
         plugins.writeBlockToBuffer()
         testSets.writeBlockToBuffer()
@@ -187,29 +187,29 @@ class GradleGroovyBuilder : Builder {
         this.projectCreator = creator
     }
 
-    override fun set(step: SourceLanguage) {
-        when (step.language) {
-            Language.JAVA -> javaSource(step.version)
-            Language.KOTLIN -> kotlinSource(step.version)
+    override fun configParam(sourceLanguage: SourceLanguage) {
+        when (sourceLanguage.language) {
+            Language.JAVA -> javaSource(sourceLanguage.version)
+            Language.KOTLIN -> kotlinSource(sourceLanguage.version)
             Language.GROOVY -> TODO()
         }
     }
 
-    override fun set(step: TestSet) {
+    override fun configParam(testSet: TestSet) {
         defaultRepositories()
         testSets {
-            +step.setName
+            +testSet.setName
         }
         plugins {
             +"org.unbroken-dome.test-sets version 1.2.0"
         }
-        val dependencyScope: String = step.setName + "Compile"
+        val dependencyScope: String = testSet.setName + "Compile"
 
         dependencies(dependencyScope) {
-            when (step.testFramework) {
-                TestFramework.JUNIT -> +dependencyStr("junit:junit", step.version)
+            when (testSet.testFramework) {
+                TestFramework.JUNIT -> +dependencyStr("junit:junit", testSet.version)
                 TestFramework.SPOCK -> {
-                    +dependencyStr("org.spockframework:spock-core", step.version)
+                    +dependencyStr("org.spockframework:spock-core", testSet.version)
                     +dependencyStr("cglib:cglib-nodep", "")
                     +dependencyStr("org.objenesis:objenesis", "")
                 }

@@ -38,7 +38,7 @@ class GradleGroovyBuilderTest extends Specification {
     def "java() adds plugin and sourceCompatibility"() {
         when:
         builder.javaSource('1.7')
-        builder.write()
+        builder.execute()
 
         then:
         println fileBuffer.output()
@@ -100,7 +100,7 @@ class GradleGroovyBuilderTest extends Specification {
                 .task('hello', "", "", "")
         builder.task('hello2', "", "", "").type('Test').dependsOn('otherTask')
         builder.javaSource('1.8')
-                .write()
+                .execute()
 
         expect:
         outputFile.exists()

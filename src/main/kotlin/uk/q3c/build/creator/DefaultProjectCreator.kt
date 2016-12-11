@@ -18,8 +18,8 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
         for (step in configuration.getSteps()) {
             for (builder in builders) {
                 when (step) {
-                    is SourceLanguage -> builder.set(step)
-                    is TestSet -> builder.set(step)
+                    is SourceLanguage -> builder.configParam(step)
+                    is TestSet -> builder.configParam(step)
                     else -> {
                         throw UnknownStepException(step.javaClass.name + " is unknown")
                     }

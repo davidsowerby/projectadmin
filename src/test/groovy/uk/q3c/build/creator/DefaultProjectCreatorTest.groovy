@@ -171,18 +171,18 @@ class DefaultProjectCreatorTest extends Specification {
         }
 
         @Override
-        void write() {
+        void execute() {
 
         }
 
         @Override
-        void set(@NotNull SourceLanguage step) {
+        void configParam(@NotNull SourceLanguage step) {
             sourceLangugageCalled++
             sourceLanguages.add(step)
         }
 
         @Override
-        void set(@NotNull TestSet step) {
+        void configParam(@NotNull TestSet step) {
             testSetCalled++
             testSets.add(step)
         }
