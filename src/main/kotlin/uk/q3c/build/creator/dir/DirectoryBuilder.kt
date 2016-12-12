@@ -10,15 +10,10 @@ import java.io.File
  * Created by David Sowerby on 11 Oct 2016
  */
 class DirectoryBuilder : Builder {
-    override fun writeToFile(outputFile: File) {
-        throw UnsupportedOperationException("DirectoryBuilder has nothing to write to file")
-    }
-
-
+    val dummyFileContent = "Dummy file to prevent Git ignoring empty directory - delete when you have something else in this directory"
     private lateinit var projectCreator: ProjectCreator
     val directories: MutableList<File> = mutableListOf()
     val files: MutableList<FileCreator> = mutableListOf()
-    val dummyJavaCount: Int = 0
 
 
     override fun execute() {
@@ -40,34 +35,46 @@ class DirectoryBuilder : Builder {
 
     override fun setProjectCreator(creator: ProjectCreator) {
         this.projectCreator = creator
-
     }
 
 
     override fun configParam(sourceLanguage: SourceLanguage) {
         when (sourceLanguage.language) {
-            Language.JAVA -> addDirectories("src/main/java", mainResourcesDir())
-            Language.KOTLIN -> addDirectories("src/main/kotlin", mainResourcesDir())
-            Language.GROOVY -> addDirectories("src/main/groovy", mainResourcesDir())
+            Language.JAVA -> {
+                val mainDir = addDirectoryWithPackage("src/main/java")
+                addFile(File(mainDir, "dummyFileJava.txt"), dummyFileContent)
+            }
+            Language.KOTLIN -> {
+                val mainDir = addDirectoryWithPackage("src/main/kotlin")
+                addFile(File(mainDir, "dummyFileKotlin.txt"), dummyFileContent)
+            }
+            Language.GROOVY -> {
+                val mainDir = addDirectoryWithPackage("src/main/groovy")
+                addFile(File(mainDir, "dummyFileGroovy.txt"), dummyFileContent)
+            }
         }
+        val resourceDir = addDirectoryWithPackage("src/main/resources")
+        addFile(File(resourceDir, "dummyResources.txt"), dummyFileContent)
     }
 
-    private fun addDirectories(mainDir: String, resources: File) {
-        val main = File(projectCreator.projectDir, mainDir)
+    private fun addFile(file: File, content: String) {
+        files.add(FileCreator(file, content))
+    }
+
+    /**
+     * Creates and returns a directory for the provided directory, extended by the basePackagePath
+     *
+     */
+    private fun addDirectoryWithPackage(directoryName: String): File {
+        val main = File(projectCreator.projectDir, directoryName)
         directories.add(main)
-        directories.add(resources)
         if (basePackageAsPath() != "") {
-            directories.add(File(main, basePackageAsPath()))
-            directories.add(File(resources, basePackageAsPath()))
+            val packageDir = File(main, basePackageAsPath())
+            directories.add(packageDir)
+            return packageDir
+        } else {
+            return main
         }
-    }
-
-    fun mainResourcesDir(): File {
-        return File(projectCreator.projectDir, "src/main/resources")
-    }
-
-    fun testResourcesDir(): File {
-        return File(projectCreator.projectDir, "src/test/resources")
     }
 
     override fun configParam(testSet: TestSet) {
@@ -77,13 +84,18 @@ class DirectoryBuilder : Builder {
             TestFramework.SPOCK -> "groovy"
         }
         val testDirPath = "src/${testSet.setName}/$languageDir"
-        addDirectories(testDirPath, testResourcesDir())
+        addDirectoryWithPackage(testDirPath)
+        addDirectoryWithPackage("src/test/resources")
     }
 
     private fun basePackageAsPath(): String {
         return projectCreator.basePackage.replace(".", "/")
     }
 
+
+    override fun writeToFile(outputFile: File) {
+        throw UnsupportedOperationException("DirectoryBuilder has nothing to write to file")
+    }
 }
 
 class FileCreator(val file: File, val content: String) {

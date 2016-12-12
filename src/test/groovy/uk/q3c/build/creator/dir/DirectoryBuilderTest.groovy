@@ -32,6 +32,12 @@ class DirectoryBuilderTest extends AbstractBuilderTest {
         File javaDirBp = new File(javaDir, bpDir)
         File groovyDirBp = new File(groovyDir, bpDir)
         File kotlinDirBp = new File(kotlinDir, bpDir)
+        File resourcesBp = new File(resourcesDir, bpDir)
+
+        File javaDummyFile = new File(javaDirBp, "dummyFileJava.txt")
+        File groovyDummyFile = new File(groovyDirBp, "dummyFileGroovy.txt")
+        File kotlinDummyFile = new File(kotlinDirBp, "dummyFileKotlin.txt")
+        File resourcesDummyFile = new File(resourcesBp, "dummyResources.txt")
 
         builder.configParam(new SourceLanguage(Language.JAVA, "1.6"))
         builder.configParam(new SourceLanguage(Language.KOTLIN, "1.0.3"))
@@ -43,15 +49,20 @@ class DirectoryBuilderTest extends AbstractBuilderTest {
         then:
         javaDirBp.exists()
         javaDirBp.isDirectory()
+        javaDummyFile.exists()
 
         kotlinDirBp.exists()
         kotlinDirBp.isDirectory()
+        kotlinDummyFile.exists()
 
         groovyDirBp.exists()
         groovyDirBp.isDirectory()
+        groovyDummyFile.exists()
 
-        resourcesDir.exists()
-        resourcesDir.isDirectory()
+        resourcesBp.exists()
+        resourcesBp.isDirectory()
+        resourcesDummyFile.exists()
+
     }
 
     def "test sets"() {
@@ -78,5 +89,16 @@ class DirectoryBuilderTest extends AbstractBuilderTest {
 
         smokeTestDirSpock.exists()
         smokeTestDirSpock.isDirectory()
+    }
+
+    def "writeToFile not supported"() {
+        given:
+        builder.mavenPublishing() // does nothing
+
+        when:
+        builder.writeToFile(new File("."))
+
+        then:
+        thrown UnsupportedOperationException
     }
 }
