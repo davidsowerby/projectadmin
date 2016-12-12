@@ -2,6 +2,8 @@ package uk.q3c.build.creator.gradle
 
 import uk.q3c.build.creator.Language
 import uk.q3c.build.creator.SourceLanguage
+import uk.q3c.build.creator.TestFramework
+import uk.q3c.build.creator.TestSet
 import uk.q3c.build.creator.gradle.element.BaseVersionElement
 import uk.q3c.build.creator.gradle.element.BasicScriptElement
 import uk.q3c.build.creator.gradle.element.PluginElement
@@ -53,6 +55,55 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
         given:
         expectedOutputFileName = 'groovy.gradle'
         builder.configParam(new SourceLanguage(Language.GROOVY, '2.4'))
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+    }
+
+    def "test set, Junit, creates test set, applies plugin and compile dependency"() {
+        given:
+        expectedOutputFileName = 'junit.gradle'
+        builder.configParam(new TestSet("test", TestFramework.JUNIT, "4.12"))
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+    }
+
+    def "latest versions"() {
+        given:
+        expectedOutputFileName = 'latestVersions.gradle'
+        builder.configParam(new TestSet("test", TestFramework.JUNIT, ""))
+        builder.configParam(new TestSet("test", TestFramework.SPOCK, ""))
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+    }
+
+    def "test set, Spock, creates test set,  and compile dependencies"() {
+        given:
+        expectedOutputFileName = 'spock.gradle'
+        builder.configParam(new TestSet("test", TestFramework.SPOCK, "1.0.1"))
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+    }
+
+    def "mavenPublishing"() {
+        given:
+        expectedOutputFileName = 'publishing.gradle'
+        builder.mavenPublishing()
 
         when:
         builder.execute()
@@ -120,6 +171,5 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
         then:
         outputAsExpected()
     }
-
 
 }

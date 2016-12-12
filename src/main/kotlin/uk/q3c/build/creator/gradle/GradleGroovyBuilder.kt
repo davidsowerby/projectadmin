@@ -43,7 +43,7 @@ class GradleGroovyBuilder : Builder {
         for (element in elements) {
             element.write()
         }
-        fileBuffer.writeToFile(outputFile())
+        writeToFile(outputFile())
         fileBuffer.reset()
     }
 
@@ -267,15 +267,12 @@ class GradleGroovyBuilder : Builder {
             "cglib:cglib-nodep" -> "3.2.0"
             "org.objenesis:objenesis" -> "2.2"
             else -> {
-                throw UnsupportedOperationException(groupModule + " is not a recognised artifact")
+                throw UnsupportedOperationException(groupModule + " is not a recognised artifact for retrieving the latest version")
             }
         }
 
     }
 
-    private fun dep(groupModule: String, version: String): String {
-        return "$groupModule:$version"
-    }
 
     private fun defaultRepositories() {
         repositories {
