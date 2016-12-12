@@ -52,8 +52,12 @@ class GradleGroovyBuilder : Builder {
         return File(projectCreator.projectDir, filename)
     }
 
+    override fun writeToFile(outputFile: File) {
+        fileBuffer.writeToFile(outputFile)
+    }
 
-    fun javaSource(sourceLevel: String): GradleGroovyBuilder {
+
+    private fun javaSource(sourceLevel: String): GradleGroovyBuilder {
         plugins {
             +"java"
         }
@@ -89,7 +93,7 @@ class GradleGroovyBuilder : Builder {
 
     fun kotlinSource(version: String) {
         buildscript {
-            +"ext.kotlin_version = '$version'"
+            elements.add(0, BasicScriptElement("ext.kotlin_version = '$version'"))
             repositories {
                 +jcenter
                 +mavenCentral
@@ -191,7 +195,13 @@ class GradleGroovyBuilder : Builder {
         when (sourceLanguage.language) {
             Language.JAVA -> javaSource(sourceLanguage.version)
             Language.KOTLIN -> kotlinSource(sourceLanguage.version)
-            Language.GROOVY -> TODO()
+            Language.GROOVY -> gradleSource()
+        }
+    }
+
+    private fun gradleSource() {
+        plugins {
+            +"groovy"
         }
     }
 

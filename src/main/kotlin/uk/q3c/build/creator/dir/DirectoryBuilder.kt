@@ -10,6 +10,9 @@ import java.io.File
  * Created by David Sowerby on 11 Oct 2016
  */
 class DirectoryBuilder : Builder {
+    override fun writeToFile(outputFile: File) {
+        throw UnsupportedOperationException("DirectoryBuilder has nothing to write to file")
+    }
 
 
     private lateinit var projectCreator: ProjectCreator

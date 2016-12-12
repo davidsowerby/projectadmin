@@ -19,7 +19,6 @@ class DirectoryBuilderTest extends AbstractBuilderTest {
     @Override
     def createBuilder() {
         builder = new DirectoryBuilder()
-
     }
 
     def "All languages"() {

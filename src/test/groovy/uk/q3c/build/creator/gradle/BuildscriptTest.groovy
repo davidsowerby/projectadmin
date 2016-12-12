@@ -1,7 +1,4 @@
 package uk.q3c.build.creator.gradle
-
-import uk.q3c.util.testutil.FileTestUtil
-import uk.q3c.util.testutil.TestResource
 /**
  * Created by David Sowerby on 07 Oct 2016
  */
@@ -41,7 +38,7 @@ class BuildscriptTest extends AbstractBuilderTest {
     def "dependencies and repositories, kotlin API"() {
         given:
         BuildscriptTester tester = new BuildscriptTester()
-        File expectedOutput = TestResource.resource(this, 'buildscript-kotlin.gradle')
+        expectedOutputFileName = 'buildscript-kotlin.gradle'
 
         when:
         tester.dependenciesOnly(builder)
@@ -50,9 +47,7 @@ class BuildscriptTest extends AbstractBuilderTest {
 
 
         then:
-        Optional<String> diffs = FileTestUtil.compare(builder.outputFile(), expectedOutput)
-        if (diffs.isPresent()) println diffs.get()
-        !diffs.isPresent()
+        outputAsExpected()
 
     }
 }

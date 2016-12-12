@@ -8,7 +8,7 @@ import uk.q3c.build.creator.gradle.element.ScriptElement
 
 abstract class NamedBlock : ScriptElement {
     val fileBuffer: FileBuffer = DefaultFileBuffer
-    val elements: MutableSet<ScriptElement> = mutableSetOf()
+    val elements: MutableList<ScriptElement> = mutableListOf()
     var writeWhenEmpty = false
 
     open fun openBlock() {
@@ -38,7 +38,7 @@ abstract class NamedBlock : ScriptElement {
     }
 
     open fun writeContent() {
-        for (element in elements) {
+        for (element in elements.distinct()) {
             element.write()
         }
     }

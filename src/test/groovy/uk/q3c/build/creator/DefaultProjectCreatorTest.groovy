@@ -191,5 +191,10 @@ class DefaultProjectCreatorTest extends Specification {
         void mavenPublishing() {
             mavenPublishingCalled = true
         }
+
+        @Override
+        void writeToFile(@NotNull File outputFile) {
+            throw new RuntimeException("Not yet implemented");
+        }
     }
 }

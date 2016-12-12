@@ -27,6 +27,7 @@ object DefaultFileBuffer : FileBuffer {
 
     override fun writeToFile(file: File) {
         log.debug("write buffer to file: {}", file)
+        log.debug("file buffer has {} chars", output().length)
         FileUtils.write(file, output())
     }
 
