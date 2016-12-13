@@ -164,6 +164,7 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
                 .task('hello', "", "", "")
         groovyBuilder.task('hello2', "", "", "").type('Test').dependsOn('otherTask')
         groovyBuilder.javaSource('1.8')
+        groovyBuilder.baseVersion('0.0.0.3')
 
         when:
         groovyBuilder.execute()

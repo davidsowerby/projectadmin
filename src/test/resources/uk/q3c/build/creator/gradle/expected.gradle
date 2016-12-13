@@ -48,3 +48,4 @@ task(name: 'hello') {
 task(name: 'hello2', type: Test, dependsOn: otherTask) {
 }
 sourceCompatibility = '1.8'
+ext.baseVersion = '0.0.0.3'
