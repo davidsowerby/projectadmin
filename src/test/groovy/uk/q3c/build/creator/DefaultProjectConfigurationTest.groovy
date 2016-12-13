@@ -4,7 +4,6 @@ import spock.lang.Specification
 import uk.q3c.build.gitplus.gitplus.GitPlus
 import uk.q3c.build.gitplus.local.GitLocal
 import uk.q3c.build.gitplus.remote.GitRemote
-
 /**
  * Created by David Sowerby on 13 Dec 2016
  */
@@ -58,6 +57,18 @@ class DefaultProjectConfigurationTest extends Specification {
         configuration.projectName == projectName
         1 * gitPlus.remote.repoName(projectName)
         1 * gitPlus.local.projectName(projectName)
+    }
+
+    def "baseVersion creates a step"() {
+        given:
+        String baseVersion = '0.0.5.6'
+
+        when:
+        configuration.baseVersion(baseVersion)
+
+        then:
+        configuration.steps.get(0) instanceof BaseVersion
+        configuration.steps.get(0).baseVersion == baseVersion
     }
 
     def "test sets does not ignore duplicates"() {

@@ -10,6 +10,7 @@ import java.io.File
  *
  * * source language(s)
  * * test set(s) (which includes a test framework)
+ * * base version (that is, the version without a build number)
  *
  * Created by David Sowerby on 10 Oct 2016
  */

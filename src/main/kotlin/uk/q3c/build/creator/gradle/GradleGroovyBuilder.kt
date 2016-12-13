@@ -57,12 +57,17 @@ class GradleGroovyBuilder : Builder {
     }
 
     override fun configParam(configStep: ConfigStep) {
-        if (configStep is SourceLanguage) {
-            configSourceLanguage(configStep)
-        } else if (configStep is TestSet) {
-            configTestSet(configStep)
+        when (configStep) {
+            is SourceLanguage -> configSourceLanguage(configStep)
+            is TestSet -> configTestSet(configStep)
+            is BaseVersion -> configBaseVersion(configStep)
         }
     }
+
+    private fun configBaseVersion(configStep: BaseVersion) {
+        elements.add(BaseVersionElement(configStep.baseVersion))
+    }
+
     private fun javaSource(sourceLevel: String): GradleGroovyBuilder {
         plugins {
             +"java"

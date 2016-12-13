@@ -9,7 +9,6 @@ import java.io.File
  * Created by David Sowerby on 13 Oct 2016
  */
 class DefaultProjectConfiguration @Inject constructor(override val gitPlus: GitPlus) : ProjectConfiguration {
-
     private val steps: MutableList<ConfigStep> = mutableListOf()
     lateinit override var projectDir: File
     lateinit override var basePackage: String
@@ -23,6 +22,12 @@ class DefaultProjectConfiguration @Inject constructor(override val gitPlus: GitP
         this.projectDir = dir
         return this
     }
+
+    override fun baseVersion(baseVersion: String): ProjectConfiguration {
+        steps.add(BaseVersion(baseVersion))
+        return this
+    }
+
 
     override fun basePackage(basePackage: String): ProjectConfiguration {
         this.basePackage = basePackage
@@ -78,4 +83,6 @@ interface ConfigStep
 data class SourceLanguage(val language: Language, val version: String) : ConfigStep
 
 data class TestSet(val setName: String, val testFramework: TestFramework, val version: String) : ConfigStep
+
+data class BaseVersion(val baseVersion: String) : ConfigStep
 

@@ -61,6 +61,7 @@ interface ProjectConfiguration {
 
     fun projectName(projectName: String): ProjectConfiguration
     fun remoteRepoUser(username: String): ProjectConfiguration
+    fun baseVersion(baseVersion: String): ProjectConfiguration
 }
 
 enum class Language {
