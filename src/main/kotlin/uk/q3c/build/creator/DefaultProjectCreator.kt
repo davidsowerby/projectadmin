@@ -17,13 +17,7 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
     override fun execute() {
         for (step in configuration.getSteps()) {
             for (builder in builders) {
-                when (step) {
-                    is SourceLanguage -> builder.configParam(step)
-                    is TestSet -> builder.configParam(step)
-                    else -> {
-                        throw UnknownStepException(step.javaClass.name + " is unknown")
-                    }
-                }
+                builder.configParam(step)
             }
         }
         if (useMavenPublishing) {
@@ -49,4 +43,3 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
 
 }
 
-class UnknownStepException(msg: String) : Throwable(msg)

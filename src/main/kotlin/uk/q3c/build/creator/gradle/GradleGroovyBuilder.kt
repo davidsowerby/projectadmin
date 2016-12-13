@@ -56,7 +56,13 @@ class GradleGroovyBuilder : Builder {
         fileBuffer.writeToFile(outputFile)
     }
 
-
+    override fun configParam(configStep: ConfigStep) {
+        if (configStep is SourceLanguage) {
+            configSourceLanguage(configStep)
+        } else if (configStep is TestSet) {
+            configTestSet(configStep)
+        }
+    }
     private fun javaSource(sourceLevel: String): GradleGroovyBuilder {
         plugins {
             +"java"
@@ -191,7 +197,7 @@ class GradleGroovyBuilder : Builder {
         this.projectCreator = creator
     }
 
-    override fun configParam(sourceLanguage: SourceLanguage) {
+    private fun configSourceLanguage(sourceLanguage: SourceLanguage) {
         when (sourceLanguage.language) {
             Language.JAVA -> javaSource(sourceLanguage.version)
             Language.KOTLIN -> kotlinSource(sourceLanguage.version)
@@ -205,7 +211,7 @@ class GradleGroovyBuilder : Builder {
         }
     }
 
-    override fun configParam(testSet: TestSet) {
+    private fun configTestSet(testSet: TestSet) {
         defaultRepositories()
         testSets {
             +testSet.setName

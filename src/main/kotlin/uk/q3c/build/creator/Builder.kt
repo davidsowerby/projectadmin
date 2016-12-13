@@ -16,15 +16,11 @@ import java.io.File
 interface Builder {
     fun setProjectCreator(creator: ProjectCreator)
     fun execute()
-    /**
-     * Sets up directories for the supplied source language.  May be called multiple times if multiple languages are used
-     */
-    fun configParam(sourceLanguage: SourceLanguage)
 
     /**
-     * Defines a [TestSet] to use
+     * [configStep] is passed to all builders for them to configure as appropriate (which may include ignoring the step)
      */
-    fun configParam(testSet: TestSet)
+    fun configParam(configStep: ConfigStep)
     fun mavenPublishing()
     fun writeToFile(outputFile: File)
 }

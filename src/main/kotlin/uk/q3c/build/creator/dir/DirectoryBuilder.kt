@@ -38,7 +38,15 @@ class DirectoryBuilder : Builder {
     }
 
 
-    override fun configParam(sourceLanguage: SourceLanguage) {
+    override fun configParam(configStep: ConfigStep) {
+        if (configStep is SourceLanguage) {
+            configSourceLanguage(configStep)
+        } else if (configStep is TestSet) {
+            configTestSet(configStep)
+        }
+    }
+
+    private fun configSourceLanguage(sourceLanguage: SourceLanguage) {
         when (sourceLanguage.language) {
             Language.JAVA -> {
                 val mainDir = addDirectoryWithPackage("src/main/java")
@@ -77,7 +85,7 @@ class DirectoryBuilder : Builder {
         }
     }
 
-    override fun configParam(testSet: TestSet) {
+    private fun configTestSet(testSet: TestSet) {
         val languageDir: String = when (testSet.testFramework) {
 
             TestFramework.JUNIT -> "java"

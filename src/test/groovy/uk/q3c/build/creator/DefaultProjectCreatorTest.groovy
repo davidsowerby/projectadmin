@@ -176,13 +176,20 @@ class DefaultProjectCreatorTest extends Specification {
         }
 
         @Override
-        void configParam(@NotNull SourceLanguage step) {
+        void configParam(ConfigStep configStep) {
+            if (configStep instanceof SourceLanguage) {
+                configSourceLanguage(configStep)
+            } else if (configStep instanceof TestSet) {
+                configTestSet(configStep)
+            }
+        }
+
+        void configSourceLanguage(@NotNull SourceLanguage step) {
             sourceLangugageCalled++
             sourceLanguages.add(step)
         }
 
-        @Override
-        void configParam(@NotNull TestSet step) {
+        void configTestSet(@NotNull TestSet step) {
             testSetCalled++
             testSets.add(step)
         }
