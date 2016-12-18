@@ -1,7 +1,5 @@
 package uk.q3c.build.creator
 
-import java.io.File
-
 /**
  * A common interface for all [Builder] implementations.  Each builder is passed each of the [configParam] values, enabling
  * a builder to set itself up as part of a configuration stage.
@@ -15,7 +13,11 @@ import java.io.File
  * Created by David Sowerby on 10 Oct 2016
  */
 interface Builder {
-    fun setProjectCreator(creator: ProjectCreator)
+    /**
+     * Builders may need information from the [ProjectCreator] - this method at the start of the [ProjectCreator.execute] method,
+     * enabling builders to respond as appropriate
+     */
+    fun projectCreator(creator: ProjectCreator)
     fun execute()
 
     /**
@@ -23,7 +25,6 @@ interface Builder {
      */
     fun configParam(configStep: ConfigStep)
     fun mavenPublishing()
-    fun writeToFile(outputFile: File)
 }
 
 

@@ -19,6 +19,7 @@ class DirectoryBuilderTest extends AbstractBuilderTest {
     @Override
     def createBuilder() {
         builder = new DirectoryBuilder()
+        builder.projectCreator = projectCreator
     }
 
     def "All languages"() {
@@ -91,14 +92,5 @@ class DirectoryBuilderTest extends AbstractBuilderTest {
         smokeTestDirSpock.isDirectory()
     }
 
-    def "writeToFile not supported"() {
-        given:
-        builder.mavenPublishing() // does nothing
 
-        when:
-        builder.writeToFile(new File("."))
-
-        then:
-        thrown UnsupportedOperationException
-    }
 }

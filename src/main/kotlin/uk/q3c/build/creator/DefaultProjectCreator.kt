@@ -7,14 +7,10 @@ import com.google.inject.Inject
  */
 class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder>, val configuration: ProjectConfiguration) : ProjectCreator, ProjectConfiguration by configuration {
 
-    init {
-        for (builder in builders) {
-            builder.setProjectCreator(this)
-        }
-    }
-
-
     override fun execute() {
+        for (builder in builders) {
+            builder.projectCreator(this)
+        }
         for (step in configuration.getSteps()) {
             for (builder in builders) {
                 builder.configParam(step)

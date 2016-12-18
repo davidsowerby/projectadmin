@@ -10,8 +10,10 @@ import java.io.File
  * Created by David Sowerby on 11 Oct 2016
  */
 class DirectoryBuilder : Builder {
+
+
     val dummyFileContent = "Dummy file to prevent Git ignoring empty directory - delete when you have something else in this directory"
-    private lateinit var projectCreator: ProjectCreator
+    lateinit var projectCreator: ProjectCreator
     val directories: MutableList<File> = mutableListOf()
     val files: MutableList<FileCreator> = mutableListOf()
 
@@ -30,11 +32,6 @@ class DirectoryBuilder : Builder {
 
     override fun mavenPublishing() {
         // do nothing
-    }
-
-
-    override fun setProjectCreator(creator: ProjectCreator) {
-        this.projectCreator = creator
     }
 
 
@@ -100,9 +97,8 @@ class DirectoryBuilder : Builder {
         return projectCreator.basePackage.replace(".", "/")
     }
 
-
-    override fun writeToFile(outputFile: File) {
-        throw UnsupportedOperationException("DirectoryBuilder has nothing to write to file")
+    override fun projectCreator(creator: ProjectCreator) {
+        projectCreator = creator
     }
 }
 

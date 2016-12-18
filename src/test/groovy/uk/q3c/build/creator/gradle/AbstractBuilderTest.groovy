@@ -27,13 +27,13 @@ class AbstractBuilderTest extends Specification {
         temp = temporaryFolder.getRoot()
         projectCreator.projectDir >> temp
         createBuilder()
-        builder.setProjectCreator(projectCreator)
         fileBuffer = KotlinObjectFactory.fileBuffer()
         fileBuffer.reset()
     }
 
     def createBuilder() {
         builder = new GradleGroovyBuilder()
+        builder.outputDir = temp
     }
 
     def outputAsExpected() {

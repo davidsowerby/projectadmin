@@ -40,18 +40,6 @@ class DefaultProjectCreatorTest extends Specification {
         creator.buildersCount() == 2
     }
 
-    def "setProjectCreator() is called on all builders"() {
-        given:
-        Set<Builder> builders = ImmutableSet.of(builder1, builder2)
-
-        when:
-        creator = new DefaultProjectCreator(builders, configuration)
-
-        then:
-        builder1.creator == creator
-        builder2.creator == creator
-    }
-
     def "execute calls each builder with each step, and mavenPublishing if true"() {
         given:
         SourceLanguage sourceLanguage1 = new SourceLanguage(Language.JAVA, "1.8")
@@ -166,11 +154,6 @@ class DefaultProjectCreatorTest extends Specification {
         List<TestSet> testSets = new ArrayList<>()
 
         @Override
-        void setProjectCreator(@NotNull ProjectCreator creator) {
-            this.creator = creator
-        }
-
-        @Override
         void execute() {
 
         }
@@ -200,8 +183,8 @@ class DefaultProjectCreatorTest extends Specification {
         }
 
         @Override
-        void writeToFile(@NotNull File outputFile) {
-            throw new RuntimeException("Not yet implemented");
+        void projectCreator(@NotNull ProjectCreator creator) {
+
         }
     }
 }

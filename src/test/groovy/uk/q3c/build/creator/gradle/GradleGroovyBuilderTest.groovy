@@ -21,6 +21,7 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
     @Override
     def createBuilder() {
         groovyBuilder = new GradleGroovyBuilder()
+        groovyBuilder.outputDir = temp
         builder = groovyBuilder
     }
 

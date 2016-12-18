@@ -40,6 +40,7 @@ class BuildscriptTest extends AbstractBuilderTest {
         BuildscriptTester tester = new BuildscriptTester()
         expectedOutputFileName = 'buildscript-kotlin.gradle'
 
+
         when:
         tester.dependenciesOnly(builder)
         tester.repositoriesOnly(builder)

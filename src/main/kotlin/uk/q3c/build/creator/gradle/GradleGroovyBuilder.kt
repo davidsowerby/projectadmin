@@ -13,7 +13,6 @@ import java.io.File
  */
 class GradleGroovyBuilder : Builder {
 
-    private lateinit var projectCreator: ProjectCreator
     private var filename: String = "build.gradle"
 
     val mavenLocal = "mavenLocal()"
@@ -30,6 +29,7 @@ class GradleGroovyBuilder : Builder {
     val repositories = Repositories()
     val dependencies = Dependencies()
     val testSets = TestSets()
+    lateinit var outputDir: File
 
 
     override fun execute() {
@@ -43,18 +43,14 @@ class GradleGroovyBuilder : Builder {
         for (element in elements) {
             element.write()
         }
-        writeToFile(outputFile())
+
+        fileBuffer.writeToFile(File(outputDir, filename))
         fileBuffer.reset()
     }
 
 
-    private fun outputFile(): File {
-        return File(projectCreator.projectDir, filename)
-    }
 
-    override fun writeToFile(outputFile: File) {
-        fileBuffer.writeToFile(outputFile)
-    }
+
 
     override fun configParam(configStep: ConfigStep) {
         when (configStep) {
@@ -198,9 +194,6 @@ class GradleGroovyBuilder : Builder {
         return this
     }
 
-    override fun setProjectCreator(creator: ProjectCreator) {
-        this.projectCreator = creator
-    }
 
     private fun configSourceLanguage(sourceLanguage: SourceLanguage) {
         when (sourceLanguage.language) {
@@ -284,6 +277,9 @@ class GradleGroovyBuilder : Builder {
 
     }
 
+    override fun projectCreator(creator: ProjectCreator) {
+        outputDir = creator.projectDir
+    }
 
     private fun defaultRepositories() {
         repositories {
