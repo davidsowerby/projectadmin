@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.jetbrains.annotations.NotNull
+import spock.lang.Ignore
 import spock.lang.Specification
 import uk.q3c.build.gitplus.gitplus.GitPlus
 import uk.q3c.build.gitplus.remote.GitRemote
@@ -141,6 +142,38 @@ class DefaultProjectCreatorTest extends Specification {
 //        true
 //
 //    }
+
+    @Ignore
+    def "create a new project - for real"() {
+        given:
+        Injector injector = Guice.createInjector(new ProjectCreatorModule())
+        creator = injector.getInstance(ProjectCreator)
+        creator.projectName = 'ion-json'
+        creator.projectUserName = 'davidsowerby'
+        creator.mergeIssueLabels = true
+        creator.basePackage = 'uk.q3c.rest.ion'
+        creator.useMavenPublishing = true
+        File gitDir = new File("/home/david/git")
+        creator.projectDir = new File(gitDir, creator.projectName)
+
+        // ToDO https://github.com/davidsowerby/projectadmin/issues/19 - ALL the following
+        creator.gitPlus.local.projectName = creator.projectName
+        creator.gitPlus.local.create(true)
+        creator.gitPlus.local.create(true)
+        creator.gitPlus.remote.create(true)
+        creator.gitPlus.remote.repoUser(creator.projectUserName)
+        creator.gitPlus.remote.mergeIssueLabels = true
+        creator.gitPlus.remote.publicProject(true)
+        creator.gitPlus.local.projectDirParent = gitDir
+
+
+        when:
+        creator.execute()
+
+        then:
+        true
+
+    }
 
 
     class MockBuilder implements Builder {
