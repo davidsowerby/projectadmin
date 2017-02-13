@@ -22,6 +22,10 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
             }
         }
 
+        for (builder in builders) {
+            builder.execute() // create directories etc
+        }
+
         // This will create repos if config correctly set up
         configuration.gitPlus.execute()
 

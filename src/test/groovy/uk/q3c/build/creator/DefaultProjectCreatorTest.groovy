@@ -10,7 +10,6 @@ import spock.lang.Ignore
 import spock.lang.Specification
 import uk.q3c.build.gitplus.gitplus.GitPlus
 import uk.q3c.build.gitplus.remote.GitRemote
-
 /**
  * Created by David Sowerby on 10 Oct 2016
  */
@@ -41,7 +40,7 @@ class DefaultProjectCreatorTest extends Specification {
         creator.buildersCount() == 2
     }
 
-    def "execute calls each builder with each step, and mavenPublishing if true"() {
+    def "execute calls each builder with each step, and mavenPublishing if true and executes the builders"() {
         given:
         SourceLanguage sourceLanguage1 = new SourceLanguage(Language.JAVA, "1.8")
         SourceLanguage sourceLanguage2 = new SourceLanguage(Language.KOTLIN, "1.0.4")
@@ -71,6 +70,13 @@ class DefaultProjectCreatorTest extends Specification {
         builder2.testSets.get(0) == testSet2
         builder1.sourceLanguages.get(0) == sourceLanguage1
         builder2.sourceLanguages.get(0) == sourceLanguage1
+
+        then:
+        builder1.executeCalled == 1
+        builder2.executeCalled == 1
+
+        then:
+        1 * gitPlus.execute()
     }
 
     def "delegation to project configuration"() {
@@ -148,11 +154,14 @@ class DefaultProjectCreatorTest extends Specification {
         given:
         Injector injector = Guice.createInjector(new ProjectCreatorModule())
         creator = injector.getInstance(ProjectCreator)
-        creator.projectName = 'ion-json'
+        creator.projectName = 'rest-base'
         creator.projectUserName = 'davidsowerby'
         creator.mergeIssueLabels = true
-        creator.basePackage = 'uk.q3c.rest.ion'
+        creator.basePackage = 'uk.q3c.rest'
         creator.useMavenPublishing = true
+        creator.baseVersion('0.0.0.1')
+        creator.source(Language.JAVA, '1.8').source(Language.KOTLIN, '1.0.6')
+        creator.testSet('spock', TestFramework.SPOCK, "")
         File gitDir = new File("/home/david/git")
         creator.projectDir = new File(gitDir, creator.projectName)
 
@@ -169,6 +178,7 @@ class DefaultProjectCreatorTest extends Specification {
 
         when:
         creator.execute()
+        true
 
         then:
         true
@@ -182,13 +192,14 @@ class DefaultProjectCreatorTest extends Specification {
         ProjectCreator creator
         int sourceLangugageCalled
         int testSetCalled
+        int executeCalled
         boolean mavenPublishingCalled
         List<SourceLanguage> sourceLanguages = new ArrayList<>()
         List<TestSet> testSets = new ArrayList<>()
 
         @Override
         void execute() {
-
+            executeCalled++
         }
 
         @Override
