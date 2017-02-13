@@ -43,7 +43,7 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
     def "kotlin source, buildscript and main body updated"() {
         given:
         expectedOutputFileName = 'kotlin.gradle'
-        builder.configParam(new SourceLanguage(Language.KOTLIN, '1.0.4'))
+        builder.configParam(new SourceLanguage(Language.KOTLIN, '1.0.6'))
 
         when:
         builder.execute()

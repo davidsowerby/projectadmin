@@ -22,7 +22,11 @@ class Dependencies : NamedBlock() {
         if (this.contains("()")) {
             elements.add(BasicScriptElement("$currentScope $this"))
         } else {
-            elements.add(BasicScriptElement("$currentScope '$this'"))
+            if (this.contains("$")) {
+                elements.add(BasicScriptElement("$currentScope \"$this\""))
+            } else {
+                elements.add(BasicScriptElement("$currentScope '$this'"))
+            }
         }
     }
 
