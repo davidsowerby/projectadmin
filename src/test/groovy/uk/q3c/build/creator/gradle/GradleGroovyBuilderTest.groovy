@@ -5,9 +5,6 @@ import uk.q3c.build.creator.SourceLanguage
 import uk.q3c.build.creator.TestFramework
 import uk.q3c.build.creator.TestSet
 import uk.q3c.build.creator.gradle.element.BaseVersionElement
-import uk.q3c.build.creator.gradle.element.BasicScriptElement
-import uk.q3c.build.creator.gradle.element.PluginElement
-
 /**
  * Created by David Sowerby on 06 Dec 2016
  */
@@ -27,23 +24,46 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
 
     def "java() adds plugin and sourceCompatibility"() {
         given:
+        expectedOutputFileName = 'java2.gradle'
         builder.configParam(new SourceLanguage(Language.JAVA, '1.7'))
 
         when:
         builder.execute()
 
         then:
-        println fileBuffer.output()
-        groovyBuilder.plugins.elements.size() == 1
-        groovyBuilder.plugins.elements.contains(new PluginElement('java'))
-        groovyBuilder.elements.size() == 1
-        groovyBuilder.elements.contains(new BasicScriptElement("sourceCompatibility = '1.7'"))
+        outputAsExpected()
     }
+
+    def "java default is 1.8"() {
+        given:
+        expectedOutputFileName = 'java.gradle'
+        builder.configParam(new SourceLanguage(Language.JAVA, ''))
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+    }
+
 
     def "kotlin source, buildscript and main body updated"() {
         given:
         expectedOutputFileName = 'kotlin.gradle'
         builder.configParam(new SourceLanguage(Language.KOTLIN, '1.0.6'))
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+    }
+
+
+    def "kotlin default is 1.0.6"() {
+        given:
+        expectedOutputFileName = 'kotlin.gradle'
+        builder.configParam(new SourceLanguage(Language.KOTLIN, ''))
 
         when:
         builder.execute()

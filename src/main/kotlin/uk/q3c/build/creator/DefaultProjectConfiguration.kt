@@ -86,3 +86,17 @@ data class TestSet(val setName: String, val testFramework: TestFramework, val ve
 
 data class BaseVersion(val baseVersion: String) : ConfigStep
 
+class LanguageVersions {
+    fun getDefault(language: SourceLanguage): String {
+        return if (language.version.isEmpty()) {
+            when (language.language) {
+                Language.JAVA -> "1.8"
+                Language.KOTLIN -> "1.0.6"
+                Language.GROOVY -> "2.4.8"
+            }
+        } else {
+            language.version
+        }
+    }
+}
+

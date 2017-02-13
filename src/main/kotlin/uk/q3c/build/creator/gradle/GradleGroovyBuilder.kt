@@ -109,6 +109,7 @@ class GradleGroovyBuilder : Builder {
                 +"org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version"
             }
         }
+        applyPlugin("kotlin")
         defaultRepositories()
         dependencies("compile") {
             +"org.jetbrains.kotlin:kotlin-stdlib:\$kotlin_version"
@@ -196,9 +197,10 @@ class GradleGroovyBuilder : Builder {
 
 
     private fun configSourceLanguage(sourceLanguage: SourceLanguage) {
+
         when (sourceLanguage.language) {
-            Language.JAVA -> javaSource(sourceLanguage.version)
-            Language.KOTLIN -> kotlinSource(sourceLanguage.version)
+            Language.JAVA -> javaSource(LanguageVersions().getDefault(sourceLanguage))
+            Language.KOTLIN -> kotlinSource(LanguageVersions().getDefault(sourceLanguage))
             Language.GROOVY -> gradleSource()
         }
     }
