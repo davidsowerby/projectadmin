@@ -125,7 +125,7 @@ class GradleGroovyBuilder : Builder {
         return repositories
     }
 
-    fun task(name: String, type: String, dependsOn: String, plugin: String, init: Task.() -> Unit): Task {
+    fun task(name: String, type: String, dependsOn: String = "", plugin: String = "", init: Task.() -> Unit): Task {
         val task = Task(name, type, dependsOn, plugin)
         task.init()
         elements.add(task)
@@ -249,6 +249,19 @@ class GradleGroovyBuilder : Builder {
                 }
             }
 
+        }
+
+        task(name = "sourcesJar", type = "Jar", dependsOn = "classes") {
+            +"classifier = 'sources'"
+            +"from sourceSets.main.allSource"
+        }
+        task(name = "javadocJar", type = "Jar", dependsOn = "javadoc") {
+            +"classifier = 'javadoc'"
+            +"from javadoc.destinationDir"
+        }
+        config(name = "artifacts") {
+            +"archives sourcesJar"
+            +"archives javadocJar"
         }
     }
 

@@ -16,9 +16,9 @@ class Task(name: String, var type: String = "", var dependsOn: String = "", var 
     }
 
     override fun openBlock() {
-        fileBuffer.append("task(")
+        fileBuffer.append("task $name(")
         var precedingArgument: Boolean = false
-        precedingArgument = addArgument("name", "'$name'", precedingArgument)
+//        precedingArgument = addArgument("name", "'$name'", precedingArgument)
         precedingArgument = addArgument("type", type, precedingArgument)
         precedingArgument = addArgument("dependsOn", dependsOn, precedingArgument)
         addArgument("plugin", plugin, precedingArgument)

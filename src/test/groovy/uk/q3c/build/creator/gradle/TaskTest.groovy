@@ -21,7 +21,7 @@ class TaskTest extends BlockReaderSpecification {
 
         then:
         List<String> result = resultLines()
-        result.get(0) == "task(name: 'newTask', type: Copy, dependsOn: otherTask, plugin: plugin) {"
+        result.get(0) == "task newTask(type: Copy, dependsOn: otherTask, plugin: plugin) {"
         result.get(1) == "}"
         result.get(2) == ""
         result.size() == 3
@@ -36,7 +36,7 @@ class TaskTest extends BlockReaderSpecification {
 
         then:
         List<String> result = resultLines()
-        result.get(0) == "task(name: 'newTask', type: Copy, dependsOn: otherTask, plugin: plugin) {"
+        result.get(0) == "task newTask(type: Copy, dependsOn: otherTask, plugin: plugin) {"
         result.get(1) == "    line 1"
         result.get(2) == "}"
         result.get(3) == ""
@@ -51,7 +51,7 @@ class TaskTest extends BlockReaderSpecification {
 
         then:
         List<String> result = resultLines()
-        result.get(0) == "task(name: 'newTask', type: Copy, dependsOn: otherTask, plugin: plugin) {"
+        result.get(0) == "task newTask(type: Copy, dependsOn: otherTask, plugin: plugin) {"
         result.get(1) == "}"
         result.get(2) == ""
         result.size() == 3
@@ -67,7 +67,7 @@ class TaskTest extends BlockReaderSpecification {
 
         then:
         List<String> result = resultLines()
-        result.get(0) == "task(name: 'newTask') {"
+        result.get(0) == "task newTask() {"
         result.get(1) == "    line 1"
         result.get(2) == "    line 2"
         result.get(3) == "}"
