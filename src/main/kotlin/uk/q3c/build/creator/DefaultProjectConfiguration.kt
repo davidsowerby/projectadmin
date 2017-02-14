@@ -16,7 +16,8 @@ class DefaultProjectConfiguration @Inject constructor(override val gitPlus: GitP
     override var mergeIssueLabels: Boolean = false
     lateinit override var projectName: String
     lateinit override var projectUserName: String
-
+    override var createNewProject: Boolean = false
+    override var publicProject: Boolean = false
 
     override fun projectDir(dir: File): ProjectConfiguration {
         this.projectDir = dir

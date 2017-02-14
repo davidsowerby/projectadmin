@@ -154,31 +154,21 @@ class DefaultProjectCreatorTest extends Specification {
         given:
         Injector injector = Guice.createInjector(new ProjectCreatorModule())
         creator = injector.getInstance(ProjectCreator)
+        creator.createNewProject = true
+        creator.publicProject = true
         creator.projectName = 'rest-base'
         creator.projectUserName = 'davidsowerby'
         creator.mergeIssueLabels = true
         creator.basePackage = 'uk.q3c.rest'
         creator.useMavenPublishing = true
         creator.baseVersion('0.0.0.1')
-        creator.source(Language.JAVA, '1.8').source(Language.KOTLIN, '1.0.6')
-        creator.testSet('spock', TestFramework.SPOCK, "")
+        creator.source(Language.JAVA, '').source(Language.KOTLIN, '')
+        creator.testSet('test', TestFramework.SPOCK, "")
         File gitDir = new File("/home/david/git")
         creator.projectDir = new File(gitDir, creator.projectName)
 
-        // ToDO https://github.com/davidsowerby/projectadmin/issues/19 - ALL the following
-        creator.gitPlus.local.projectName = creator.projectName
-        creator.gitPlus.local.create(true)
-        creator.gitPlus.local.create(true)
-        creator.gitPlus.remote.create(true)
-        creator.gitPlus.remote.repoUser(creator.projectUserName)
-        creator.gitPlus.remote.mergeIssueLabels = true
-        creator.gitPlus.remote.publicProject(true)
-        creator.gitPlus.local.projectDirParent = gitDir
-
-
         when:
         creator.execute()
-        true
 
         then:
         true

@@ -8,6 +8,7 @@ import com.google.inject.Inject
 class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder>, val configuration: ProjectConfiguration) : ProjectCreator, ProjectConfiguration by configuration {
 
     override fun execute() {
+        prepareGitPlus()
         for (builder in builders) {
             builder.projectCreator(this)
         }
@@ -34,6 +35,16 @@ class DefaultProjectCreator @Inject constructor(val builders: MutableSet<Builder
         if (configuration.mergeIssueLabels) {
             configuration.gitPlus.remote.mergeLabels()
         }
+    }
+
+    private fun prepareGitPlus() {
+        configuration.gitPlus.local.create = createNewProject
+        configuration.gitPlus.remote.create = createNewProject
+        configuration.gitPlus.remote.mergeIssueLabels = mergeIssueLabels
+        configuration.gitPlus.local.projectName = projectName
+        configuration.gitPlus.remote.repoUser = projectUserName
+        configuration.gitPlus.remote.publicProject = publicProject
+        configuration.gitPlus.local.projectDirParent = projectDir.parentFile
     }
 
     override fun buildersCount(): Int {

@@ -24,12 +24,14 @@ interface ProjectCreator : ProjectConfiguration {
 
 interface ProjectConfiguration {
     val gitPlus: GitPlus // this will eventually be removed, see issue #13
+    var createNewProject: Boolean
     var basePackage: String
     var projectDir: File
     var useMavenPublishing: Boolean
     var mergeIssueLabels: Boolean
     var projectUserName: String
     var projectName: String
+    var publicProject: Boolean
 
     fun projectDir(dir: File): ProjectConfiguration
     fun basePackage(basePackage: String): ProjectConfiguration
