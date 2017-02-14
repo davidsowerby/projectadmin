@@ -4,7 +4,7 @@ import uk.q3c.build.creator.Language
 import uk.q3c.build.creator.SourceLanguage
 import uk.q3c.build.creator.TestFramework
 import uk.q3c.build.creator.TestSet
-import uk.q3c.build.creator.gradle.element.BaseVersionElement
+
 /**
  * Created by David Sowerby on 06 Dec 2016
  */
@@ -143,12 +143,15 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
     }
 
     def "baseVersion"() {
+        given:
+        expectedOutputFileName = 'baseVersion.gradle'
+        groovyBuilder.baseVersion('0.0.1.99')
+
         when:
-        groovyBuilder.baseVersion('1.9.9')
+        builder.execute()
 
         then:
-        groovyBuilder.elements.size() == 1
-        groovyBuilder.elements.contains(new BaseVersionElement("1.9.9"))
+        outputAsExpected()
     }
 
     def "wrapper"() {
@@ -184,7 +187,7 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
                 .applyFrom('wiggly.gradle')
                 .task('hello', "", "", "")
         groovyBuilder.task('hello2', "", "", "").type('Test').dependsOn('otherTask')
-        groovyBuilder.javaSource('1.8')
+        groovyBuilder.configParam(new SourceLanguage(Language.JAVA, '1.8'))
         groovyBuilder.baseVersion('0.0.0.3')
 
         when:
@@ -192,6 +195,26 @@ class GradleGroovyBuilderTest extends AbstractBuilderTest {
 
         then:
         outputAsExpected()
+    }
+
+    def "full monty, from configParam calls"() {
+        given:
+        expectedOutputFileName = 'fullMonty.gradle'
+        groovyBuilder.mavenPublishing()
+        groovyBuilder.configParam(new SourceLanguage(Language.JAVA, ''))
+        groovyBuilder.configParam(new SourceLanguage(Language.KOTLIN, ''))
+        groovyBuilder.configParam(new TestSet('test', TestFramework.JUNIT, ''))
+        groovyBuilder.configParam(new TestSet('test', TestFramework.SPOCK, ''))
+        groovyBuilder.configParam(new TestSet('integrationTest', TestFramework.SPOCK, ''))
+        groovyBuilder.baseVersion('0.0.0.3')
+
+
+        when:
+        builder.execute()
+
+        then:
+        outputAsExpected()
+
     }
 
 }

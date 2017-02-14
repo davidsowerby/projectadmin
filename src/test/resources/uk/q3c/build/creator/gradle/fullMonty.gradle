@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.0.4'
+    ext.kotlin_version = '1.0.6'
 
     repositories {
         jcenter()
@@ -7,20 +7,20 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 plugins {
     id 'maven'
     id 'maven-publish'
+    id 'java'
     id 'org.unbroken-dome.test-sets' version '1.2.0'
 }
 
 testSets {
-    unitTest
+    test
     integrationTest
-    functionalTest
 }
 
 repositories {
@@ -29,18 +29,16 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version'
-    compile 'org.jetbrains.kotlin:kotlin-reflect:$kotlin_version'
-    unitTestCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    unitTestCompile 'cglib:cglib-nodep:3.2.0'
-    unitTestCompile 'org.objenesis:objenesis:2.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'cglib:cglib-nodep:3.2.0'
+    testCompile 'org.objenesis:objenesis:2.2'
     integrationTestCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     integrationTestCompile 'cglib:cglib-nodep:3.2.0'
     integrationTestCompile 'org.objenesis:objenesis:2.2'
-    functionalTestCompile 'junit:junit:4:12'
 }
-apply plugin: 'uk.q3c.simplycd'
-apply from: 'gradle/versioning.gradle'
 
 publishing {
 
@@ -59,3 +57,6 @@ publishing {
         }
     }
 }
+sourceCompatibility = '1.8'
+apply plugin: 'kotlin'
+ext.baseVersion = '0.0.0.3'

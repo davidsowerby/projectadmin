@@ -80,23 +80,37 @@ class DefaultProjectConfiguration @Inject constructor(override val gitPlus: GitP
 
 interface ConfigStep
 
-data class SourceLanguage(val language: Language, val version: String) : ConfigStep
-
-data class TestSet(val setName: String, val testFramework: TestFramework, val version: String) : ConfigStep
-
-data class BaseVersion(val baseVersion: String) : ConfigStep
-
-class LanguageVersions {
-    fun getDefault(language: SourceLanguage): String {
-        return if (language.version.isEmpty()) {
-            when (language.language) {
+data class SourceLanguage(val language: Language, val version: String) : ConfigStep {
+    /**
+     * Returns the specified version - or the default (latest) if the supplied [version] is blank
+     */
+    fun languageVersion(): String {
+        return if (version.isBlank()) {
+            when (language) {
                 Language.JAVA -> "1.8"
                 Language.KOTLIN -> "1.0.6"
                 Language.GROOVY -> "2.4.8"
             }
         } else {
-            language.version
+            version
         }
     }
 }
+
+data class TestSet(val setName: String, val testFramework: TestFramework, val version: String) : ConfigStep {
+
+    fun frameworkVersion(): String {
+        return if (version.isBlank()) {
+            when (testFramework) {
+                TestFramework.JUNIT -> "4.12"
+                TestFramework.SPOCK -> "1.0-groovy-2.4"
+            }
+        } else {
+            version
+        }
+    }
+}
+
+data class BaseVersion(val baseVersion: String) : ConfigStep
+
 

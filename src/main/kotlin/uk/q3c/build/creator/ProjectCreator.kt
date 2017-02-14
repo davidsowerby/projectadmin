@@ -52,7 +52,7 @@ interface ProjectConfiguration {
      * If true, merges the labels provided by [issueLabels] with the remote repo's existing issue labels.  See [GitRemote.mergeIssueLabels]
      * If false, this action is cancelled.
      */
-    fun mergeIssueLabels(merge: Boolean=true): ProjectConfiguration
+    fun mergeIssueLabels(merge: Boolean = true): ProjectConfiguration
 
     /**
      * The issues to use for the remote repo.  If this is not set and [mergeIssueLabels] is set to true, the default labels provided by [GitPlusConfiguration] are used
@@ -66,6 +66,7 @@ interface ProjectConfiguration {
 
 enum class Language {
     JAVA, KOTLIN, GROOVY
+
 }
 
 enum class TestFramework {

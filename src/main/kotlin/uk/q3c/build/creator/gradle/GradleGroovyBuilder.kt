@@ -1,6 +1,7 @@
 package uk.q3c.build.creator.gradle
 
 import uk.q3c.build.creator.*
+import uk.q3c.build.creator.Language.*
 import uk.q3c.build.creator.gradle.buffer.DefaultFileBuffer
 import uk.q3c.build.creator.gradle.buffer.FileBuffer
 import uk.q3c.build.creator.gradle.element.*
@@ -49,9 +50,6 @@ class GradleGroovyBuilder : Builder {
     }
 
 
-
-
-
     override fun configParam(configStep: ConfigStep) {
         when (configStep) {
             is SourceLanguage -> configSourceLanguage(configStep)
@@ -64,11 +62,11 @@ class GradleGroovyBuilder : Builder {
         elements.add(BaseVersionElement(configStep.baseVersion))
     }
 
-    private fun javaSource(sourceLevel: String): GradleGroovyBuilder {
+    private fun javaSource(language: SourceLanguage): GradleGroovyBuilder {
         plugins {
             +"java"
         }
-        elements.add(BasicScriptElement("sourceCompatibility = '$sourceLevel'"))
+        elements.add(BasicScriptElement("sourceCompatibility = '${language.languageVersion()}'"))
         return this
     }
 
@@ -98,9 +96,9 @@ class GradleGroovyBuilder : Builder {
         return this
     }
 
-    fun kotlinSource(version: String) {
+    fun kotlinSource(language: SourceLanguage) {
         buildscript {
-            elements.add(0, BasicScriptElement("ext.kotlin_version = '$version'"))
+            elements.add(0, BasicScriptElement("ext.kotlin_version = '${language.languageVersion()}'"))
             repositories {
                 +jcenter
                 +mavenCentral
@@ -199,9 +197,9 @@ class GradleGroovyBuilder : Builder {
     private fun configSourceLanguage(sourceLanguage: SourceLanguage) {
 
         when (sourceLanguage.language) {
-            Language.JAVA -> javaSource(LanguageVersions().getDefault(sourceLanguage))
-            Language.KOTLIN -> kotlinSource(LanguageVersions().getDefault(sourceLanguage))
-            Language.GROOVY -> gradleSource()
+            JAVA -> javaSource(sourceLanguage)
+            KOTLIN -> kotlinSource(sourceLanguage)
+            GROOVY -> gradleSource()
         }
     }
 
@@ -223,9 +221,9 @@ class GradleGroovyBuilder : Builder {
 
         dependencies(dependencyScope) {
             when (testSet.testFramework) {
-                TestFramework.JUNIT -> +dependencyStr("junit:junit", testSet.version)
+                TestFramework.JUNIT -> +dependencyStr("junit:junit", testSet.frameworkVersion())
                 TestFramework.SPOCK -> {
-                    +dependencyStr("org.spockframework:spock-core", testSet.version)
+                    +dependencyStr("org.spockframework:spock-core", testSet.frameworkVersion())
                     +dependencyStr("cglib:cglib-nodep", "")
                     +dependencyStr("org.objenesis:objenesis", "")
                 }
