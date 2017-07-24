@@ -6,14 +6,21 @@ import com.google.common.collect.ImmutableSet
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.jetbrains.annotations.NotNull
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Ignore
 import spock.lang.Specification
 import uk.q3c.build.gitplus.gitplus.GitPlus
+import uk.q3c.build.gitplus.local.GitLocal
 import uk.q3c.build.gitplus.remote.GitRemote
 /**
  * Created by David Sowerby on 10 Oct 2016
  */
 class DefaultProjectCreatorTest extends Specification {
+
+    @Rule
+    TemporaryFolder temporaryFolder
+    File temp
 
     MockBuilder builder1 = new MockBuilder()
     MockBuilder builder2 = new MockBuilder()
@@ -21,9 +28,16 @@ class DefaultProjectCreatorTest extends Specification {
     ProjectCreator creator
     GitPlus gitPlus = Mock(GitPlus)
     GitRemote gitRemote = Mock(GitRemote)
+    GitLocal gitLocal = Mock()
+    File projectDir
 
     def setup() {
+        temp = temporaryFolder.getRoot()
+        projectDir = new File(temp, "wiggly")
         configuration.getGitPlus() >> gitPlus
+        gitPlus.local >> gitLocal
+        gitPlus.remote >> gitRemote
+        configuration.projectDir >> projectDir
     }
 
 
@@ -156,14 +170,14 @@ class DefaultProjectCreatorTest extends Specification {
         creator = injector.getInstance(ProjectCreator)
         creator.createNewProject = true
         creator.publicProject = true
-        creator.projectName = 'rest-base'
+        creator.projectName = 'kaytee-test-delegate'
         creator.projectUserName = 'davidsowerby'
         creator.mergeIssueLabels = true
-        creator.basePackage = 'uk.q3c.rest'
-        creator.useMavenPublishing = true
-        creator.baseVersion('0.0.0.1')
+        creator.basePackage = 'uk.q3c.kaytee'
+        creator.useMavenPublishing = false
+//        creator.baseVersion('0.0.0.1')
         creator.source(Language.JAVA, '').source(Language.KOTLIN, '')
-        creator.testSet('test', TestFramework.SPOCK, "")
+//        creator.testSet('test', TestFramework.SPOCK, "")
         File gitDir = new File("/home/david/git")
         creator.projectDir = new File(gitDir, creator.projectName)
 

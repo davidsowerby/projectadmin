@@ -1,48 +1,40 @@
 //noinspection GrPackage
 buildscript {
-    ext.kotlin_version = '1.0.5-2'
+    ext.kotlin_version = '1.1.3-2'
+    ext.kaytee_plugin_version = "0.15.3.0"
     repositories {
-//        maven {
-//            url 'https://oss.sonatype.org/content/repositories/snapshots'
-//        }
+        mavenLocal()
         mavenCentral()
         jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "uk.q3c.kaytee:kaytee-plugin:$kaytee_plugin_version"
     }
 }
 
-plugins {
-    id 'java'
-    id 'groovy'
-    id 'idea'
-    id 'eclipse-wtp'
-    id 'org.unbroken-dome.test-sets' version '1.2.0'
-    id 'maven'
-    id 'maven-publish'
-}
 
+apply plugin: 'uk.q3c.kaytee'
 apply plugin: 'kotlin'
-apply plugin: "jacoco"
 
-sourceCompatibility = '1.8'
-version = '0.7.3.8'
 group = 'uk.q3c.build'
 
-testSets {
-    integrationTest
-}
 
 ext.assertjVersion = '3.3.0'
 ext.commonsLangVersion = '3.3.2'
-ext.guavaVersion = '19.0'
-ext.guiceVersion = '4.0'
+ext.guavaVersion = '22.0'
+ext.guiceVersion = '4.1'
+
+kaytee {
+    baseVersion = "0.7.4.0"
+}
+
+bintray {
+    user = 'dsowerby'
+}
 
 repositories {
-//    maven {
-//        url 'https://oss.sonatype.org/content/repositories/snapshots'
-//    }
+    mavenLocal()
     jcenter()
     mavenLocal()
 }
@@ -53,7 +45,7 @@ dependencies {
     compile 'com.google.inject.extensions:guice-multibindings:' + guiceVersion
 
     //gitplus
-    compile 'uk.q3c.build:gitplus:0.17.0.61'
+    compile 'uk.q3c.build:gitplus:0.29.3.0.222ca19'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -77,49 +69,6 @@ dependencies {
 }
 
 
-publishing {
-    publications {
-        mavenStuff(MavenPublication) {
-            from components.java
 
-            artifact sourcesJar {
-                classifier "sources"
-            }
-
-            artifact javadocJar {
-                classifier "javadoc"
-            }
-        }
-    }
-}
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-javadoc {
-    failOnError = false
-}
-
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
-}
-
-jacocoTestReport {
-    reports {
-        //XML required by coveralls and for the quality gate checks
-        xml.enabled true
-    }
-}
 
 
