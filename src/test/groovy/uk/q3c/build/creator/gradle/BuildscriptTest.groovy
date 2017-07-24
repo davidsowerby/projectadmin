@@ -11,14 +11,6 @@ class BuildscriptTest extends AbstractBuilderTest {
         buildscript = new Buildscript()
     }
 
-    def "repositories has primary sub-elements added at startup"() {
-
-        expect:
-        buildscript.elements.size() == 2
-        buildscript.elements.contains(buildscript.repositories)
-        buildscript.elements.contains(buildscript.dependencies)
-
-    }
 
     def "prints nothing when empty, only relevant sub-section if not empty"() {
         when:
@@ -35,20 +27,4 @@ class BuildscriptTest extends AbstractBuilderTest {
         !fileBuffer.output().isEmpty()
     }
 
-    def "dependencies and repositories, kotlin API"() {
-        given:
-        BuildscriptTester tester = new BuildscriptTester()
-        expectedOutputFileName = 'buildscript-kotlin.gradle'
-
-
-        when:
-        tester.dependenciesOnly(builder)
-        tester.repositoriesOnly(builder)
-        builder.execute()
-
-
-        then:
-        outputAsExpected()
-
-    }
 }

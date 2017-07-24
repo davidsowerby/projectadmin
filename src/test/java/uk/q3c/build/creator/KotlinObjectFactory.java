@@ -14,6 +14,7 @@ public class KotlinObjectFactory {
     public static FileBuffer fileBuffer() {
         return DefaultFileBuffer.INSTANCE;
     }
+//    public static BuildscriptTester buildscriptTester(){return new BuildscriptTester();}
 
 
 }

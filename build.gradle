@@ -26,7 +26,7 @@ ext.guavaVersion = '22.0'
 ext.guiceVersion = '4.1'
 
 kaytee {
-    baseVersion = "0.7.4.0"
+    baseVersion = "0.7.4.1"
 }
 
 bintray {
@@ -61,12 +61,16 @@ dependencies {
     testCompile 'uk.q3c:q3c-testUtil:0.9.0.140'
 //    testCompile 'org.assertj:assertj-core:3.4.0'
 
+    testCompile 'io.kotlintest:kotlintest:2.0.4'
+    testCompile 'com.nhaarman:mockito-kotlin:1.5.0'
+
     //utility
     compile 'com.google.guava:guava:' + guavaVersion
     compile 'org.apache.commons:commons-lang3:' + commonsLangVersion
     compile 'com.google.code.findbugs:annotations:3.0.0'
 
 }
+
 
 
 
